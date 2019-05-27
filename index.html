@@ -314,9 +314,9 @@ testing&lt;-training[-inTrain,]</code></pre>
 ## Resampling results across tuning parameters:
 ## 
 ##   mtry  Accuracy   Kappa    
-##    2    0.9846400  0.9805699
-##   20    0.9866055  0.9830572
-##   39    0.9811458  0.9761475
+##    2    0.9847128  0.9806588
+##   20    0.9862415  0.9825948
+##   39    0.9804178  0.9752243
 ## 
 ## Accuracy was used to select the optimal model using the largest value.
 ## The final value used for the model was mtry = 20.</code></pre>
@@ -328,14 +328,14 @@ testing&lt;-training[-inTrain,]</code></pre>
 ##                      Number of trees: 500
 ## No. of variables tried at each split: 20
 ## 
-##         OOB estimate of  error rate: 0.82%
+##         OOB estimate of  error rate: 0.81%
 ## Confusion matrix:
 ##      A    B    C    D    E class.error
-## A 3900    4    1    0    1 0.001536098
-## B   15 2632   11    0    0 0.009781791
-## C    0   15 2375    6    0 0.008764608
-## D    0    1   41 2206    4 0.020426288
-## E    0    1    5    7 2512 0.005148515</code></pre>
+## A 3901    4    0    0    1 0.001280082
+## B   22 2621   15    0    0 0.013920241
+## C    0   12 2377    7    0 0.007929883
+## D    2    1   30 2217    2 0.015541741
+## E    0    2    6    7 2510 0.005940594</code></pre>
 <pre class="r"><code>print(fitLDA)</code></pre>
 <pre><code>## Linear Discriminant Analysis 
 ## 
@@ -345,11 +345,11 @@ testing&lt;-training[-inTrain,]</code></pre>
 ## 
 ## No pre-processing
 ## Resampling: Cross-Validated (3 fold) 
-## Summary of sample sizes: 9159, 9158, 9157 
+## Summary of sample sizes: 9158, 9157, 9159 
 ## Resampling results:
 ## 
 ##   Accuracy   Kappa    
-##   0.6395867  0.5423972</code></pre>
+##   0.6467935  0.5515642</code></pre>
 <pre class="r"><code>#The Random forest model is better as the LDA, because he has a better accuracy and a better kappa. So I choice the random forest model.</code></pre>
 </div>
 <div id="prediction-with-training" class="section level3">
@@ -396,17 +396,17 @@ confusionMatrix(testing$classe, predTRAINING)</code></pre>
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1167    0    0    0    0
-##          B    0  779    0    0    0
-##          C    0    0  748    0    0
-##          D    0    0    0  669    0
-##          E    0    0    0    0  770
+##          A 1189    0    0    0    0
+##          B    0  795    0    0    0
+##          C    0    0  709    0    0
+##          D    0    0    0  675    0
+##          E    0    0    0    0  735
 ## 
 ## Overall Statistics
 ##                                      
 ##                Accuracy : 1          
 ##                  95% CI : (0.9991, 1)
-##     No Information Rate : 0.2824     
+##     No Information Rate : 0.2898     
 ##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16  
 ##                                      
 ##                   Kappa : 1          
@@ -415,14 +415,14 @@ confusionMatrix(testing$classe, predTRAINING)</code></pre>
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity            1.0000   1.0000    1.000   1.0000   1.0000
-## Specificity            1.0000   1.0000    1.000   1.0000   1.0000
-## Pos Pred Value         1.0000   1.0000    1.000   1.0000   1.0000
-## Neg Pred Value         1.0000   1.0000    1.000   1.0000   1.0000
-## Prevalence             0.2824   0.1885    0.181   0.1619   0.1863
-## Detection Rate         0.2824   0.1885    0.181   0.1619   0.1863
-## Detection Prevalence   0.2824   0.1885    0.181   0.1619   0.1863
-## Balanced Accuracy      1.0000   1.0000    1.000   1.0000   1.0000</code></pre>
+## Sensitivity            1.0000   1.0000   1.0000   1.0000   1.0000
+## Specificity            1.0000   1.0000   1.0000   1.0000   1.0000
+## Pos Pred Value         1.0000   1.0000   1.0000   1.0000   1.0000
+## Neg Pred Value         1.0000   1.0000   1.0000   1.0000   1.0000
+## Prevalence             0.2898   0.1938   0.1728   0.1645   0.1791
+## Detection Rate         0.2898   0.1938   0.1728   0.1645   0.1791
+## Detection Prevalence   0.2898   0.1938   0.1728   0.1645   0.1791
+## Balanced Accuracy      1.0000   1.0000   1.0000   1.0000   1.0000</code></pre>
 </div>
 
 
