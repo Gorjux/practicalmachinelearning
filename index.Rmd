@@ -121,16 +121,18 @@ fitGBM<-train(classe~., data=training, method="gbm",preProcess=c("center", "scal
 ```
 
 ### **COMPARING THE MODELS** 
-* **first step**: information on the models
+####* **first step**: informations on the models
 ```{r}
 print(fitRF)
 print(fitGBM)
 #Looking the values of the accuracies and the kappas, random forest seems to be a better model than boosted trees.
 ```
-* **Second step**:CALCULATE the out of sample error
+####* **Second step**:CALCULATE the OUT OF SAMPLE ERROR
 ```{r}
 errorRF<-1-mean(fitRF$resample$Accuracy)
 errorGBM<-1-mean(fitGBM$resample$Accuracy)
+errorRF
+errorGBM
 #The out of sample error is smaller for the random forest model as for the boosted trees. I choice the random forest model.
 ```
 

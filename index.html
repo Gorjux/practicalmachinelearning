@@ -316,9 +316,8 @@ testing&lt;-training[-inTrain,]</code></pre>
 </div>
 <div id="comparing-the-models" class="section level3">
 <h3><strong>COMPARING THE MODELS</strong></h3>
-<ul>
-<li><strong>first step</strong>: information on the models</li>
-</ul>
+<div id="first-step-informations-on-the-models" class="section level4">
+<h4>* <strong>first step</strong>: informations on the models</h4>
 <pre class="r"><code>print(fitRF)</code></pre>
 <pre><code>## Random Forest 
 ## 
@@ -332,9 +331,9 @@ testing&lt;-training[-inTrain,]</code></pre>
 ## Resampling results across tuning parameters:
 ## 
 ##   mtry  Accuracy   Kappa    
-##    2    0.9852953  0.9813959
-##   20    0.9861687  0.9825011
-##   39    0.9780883  0.9722771
+##    2    0.9847125  0.9806581
+##   20    0.9862414  0.9825941
+##   39    0.9798353  0.9744861
 ## 
 ## Accuracy was used to select the optimal model using the largest value.
 ## The final value used for the model was mtry = 20.</code></pre>
@@ -347,19 +346,19 @@ testing&lt;-training[-inTrain,]</code></pre>
 ## 
 ## Pre-processing: centered (39), scaled (39) 
 ## Resampling: Cross-Validated (3 fold) 
-## Summary of sample sizes: 9158, 9158, 9158 
+## Summary of sample sizes: 9159, 9157, 9158 
 ## Resampling results across tuning parameters:
 ## 
 ##   interaction.depth  n.trees  Accuracy   Kappa    
-##   1                   50      0.7393900  0.6696571
-##   1                  100      0.8012667  0.7485067
-##   1                  150      0.8360632  0.7925184
-##   2                   50      0.8396302  0.7968522
-##   2                  100      0.8904419  0.8613424
-##   2                  150      0.9136638  0.8907207
-##   3                   50      0.8800320  0.8481576
-##   3                  100      0.9256752  0.9059598
-##   3                  150      0.9487515  0.9351624
+##   1                   50      0.7293443  0.6569197
+##   1                  100      0.7927492  0.7377445
+##   1                  150      0.8301668  0.7851446
+##   2                   50      0.8343162  0.7901410
+##   2                  100      0.8905867  0.8614269
+##   2                  150      0.9157017  0.8932697
+##   3                   50      0.8805424  0.8487424
+##   3                  100      0.9267669  0.9072922
+##   3                  150      0.9461308  0.9318369
 ## 
 ## Tuning parameter 'shrinkage' was held constant at a value of 0.1
 ## 
@@ -368,12 +367,17 @@ testing&lt;-training[-inTrain,]</code></pre>
 ## The final values used for the model were n.trees = 150,
 ##  interaction.depth = 3, shrinkage = 0.1 and n.minobsinnode = 10.</code></pre>
 <pre class="r"><code>#Looking the values of the accuracies and the kappas, random forest seems to be a better model than boosted trees.</code></pre>
-<ul>
-<li><strong>Second step</strong>:CALCULATE the out of sample error</li>
-</ul>
+</div>
+<div id="second-stepcalculate-the-out-of-sample-error" class="section level4">
+<h4>* <strong>Second step</strong>:CALCULATE the OUT OF SAMPLE ERROR</h4>
 <pre class="r"><code>errorRF&lt;-1-mean(fitRF$resample$Accuracy)
 errorGBM&lt;-1-mean(fitGBM$resample$Accuracy)
-#The out of sample error is smaller for the random forest model as for the boosted trees. I choice the random forest model.</code></pre>
+errorRF</code></pre>
+<pre><code>## [1] 0.01375864</code></pre>
+<pre class="r"><code>errorGBM</code></pre>
+<pre><code>## [1] 0.05386923</code></pre>
+<pre class="r"><code>#The out of sample error is smaller for the random forest model as for the boosted trees. I choice the random forest model.</code></pre>
+</div>
 </div>
 <div id="prediction-with-training" class="section level3">
 <h3><strong>PREDICTION WITH TRAINING</strong></h3>
@@ -420,17 +424,17 @@ confusionMatrix(testing$classe, predTRAINING)</code></pre>
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1188    0    0    0    0
-##          B    0  822    0    0    0
-##          C    0    0  681    0    0
-##          D    0    0    0  668    0
-##          E    0    0    0    0  780
+##          A 1190    0    0    0    0
+##          B    0  785    0    0    0
+##          C    0    0  701    0    0
+##          D    0    0    0  679    0
+##          E    0    0    0    0  766
 ## 
 ## Overall Statistics
 ##                                      
 ##                Accuracy : 1          
 ##                  95% CI : (0.9991, 1)
-##     No Information Rate : 0.287      
+##     No Information Rate : 0.2888     
 ##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16  
 ##                                      
 ##                   Kappa : 1          
@@ -440,14 +444,14 @@ confusionMatrix(testing$classe, predTRAINING)</code></pre>
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity             1.000   1.0000   1.0000   1.0000   1.0000
-## Specificity             1.000   1.0000   1.0000   1.0000   1.0000
-## Pos Pred Value          1.000   1.0000   1.0000   1.0000   1.0000
-## Neg Pred Value          1.000   1.0000   1.0000   1.0000   1.0000
-## Prevalence              0.287   0.1986   0.1645   0.1614   0.1885
-## Detection Rate          0.287   0.1986   0.1645   0.1614   0.1885
-## Detection Prevalence    0.287   0.1986   0.1645   0.1614   0.1885
-## Balanced Accuracy       1.000   1.0000   1.0000   1.0000   1.0000</code></pre>
+## Sensitivity            1.0000   1.0000   1.0000   1.0000   1.0000
+## Specificity            1.0000   1.0000   1.0000   1.0000   1.0000
+## Pos Pred Value         1.0000   1.0000   1.0000   1.0000   1.0000
+## Neg Pred Value         1.0000   1.0000   1.0000   1.0000   1.0000
+## Prevalence             0.2888   0.1905   0.1701   0.1648   0.1859
+## Detection Rate         0.2888   0.1905   0.1701   0.1648   0.1859
+## Detection Prevalence   0.2888   0.1905   0.1701   0.1648   0.1859
+## Balanced Accuracy      1.0000   1.0000   1.0000   1.0000   1.0000</code></pre>
 </div>
 
 
