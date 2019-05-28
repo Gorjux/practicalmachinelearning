@@ -1,5 +1,5 @@
 ---
-title: "practical Machine Learning Course Project"
+title: "Practical Machine Learning Course Project"
 author: "Barbara Gorjux"
 date: "27 mai 2019"
 output: html_document
@@ -23,6 +23,7 @@ This dataset collected by Velloso, E. ; Bulling, A. ; Gellersen, H. ; Ugulino
 library(lattice)
 library(ggplot2)
 library(caret)
+library(randomForest)
 
 ```
 ### **DATA PREPARATION**
@@ -46,25 +47,25 @@ test<-read.csv(file = "pml-testing.csv")
 ```
 #### **Cleaning the data**
 
-* **First step**: remove the variables which contain fast only NA's values 
+* **First step**:I remove the variables which contain fast only NA's values 
 ```{r}
 onlyNA<-sapply(train, function(x) mean(is.na(x)))>0.95
 training<-train[, onlyNA==F]
 
 ```
 
-* **Second step**: remove the 7 first variables which don't measure how the participant performe the exercise
+* **Second step**:I remove the 7 first variables which don't measure how the participant performe the exercise
 ```{r}
 training<-training[,-(1:7)]
 ```
 
-* **Third step**: remove the variables which have a near zero variability
+* **Third step**:I remove the variables which have a near zero variability
 ```{r}
 nzv<-nearZeroVar(training)
 training<-training[,-nzv]
 ```
 
-* **Fourth step**: use PCA (principal component analysis) to choice the more relevant variables
+* **Fourth step**: I use PCA (principal component analysis) to choice the more relevant variables
 ```{r}
 training.matrix<-data.matrix(training, rownames.force=NA) #convert the data frame into a matrix
 dim(training.matrix)
@@ -80,7 +81,7 @@ top_40_variables<-names(variable_score_ranked[1:40])#extract the names of the 40
 
 training<-training[top_40_variables]
 ```
-* **fifth step**: cheaking if 'classe' variable is allways in the data
+* **fifth step**: I cheak if 'classe' variable is allways in the data
 ```{r}
 "classe"%in%names(training)
 ```
@@ -98,29 +99,39 @@ set.seed(10)
 
 ### **FITTING TWO MODELS**
 
-#### **3-fold cross validation**
+I first will use the trainControl()'s function in order to built a 3-fold cross validation. The cross-validation allows me to estimate the out of sample error. 
+
+I have a classification and supervised learning problem. The goal is to predict the outcome "classe" with the inputs (the 39 variables I have selectided). "classe" is a qualitativ variable, which evaluate how well the exersise did (A correspond to correctly and B,C,D,E correspond to specific mistakes). Then I will built two models: random forest model and a boosted trees model. I use a preprocess in order to center and scale the variables.
+
+#### **built a 3-fold cross validation**
 ```{r}
 fitControl<-trainControl(method="cv",number=3, verboseIter = FALSE)
+
 ```
 
 #### **First model: Random forest**
 ```{r}
-fitRF<-train(classe~., data=training, method="rf", trControl=fitControl)
+fitRF<-train(classe~., data=training, method="rf", preProcess=c("center", "scale"), trControl=fitControl)
 ```
 
-#### **Second model: Linear discriminant analysis**
+#### **Second model: Boosted trees**
 ```{r}
-fitLDA<-train(classe~., data=training, method="lda", trControl=fitControl, verbose=FALSE)
+fitGBM<-train(classe~., data=training, method="gbm",preProcess=c("center", "scale"), trControl=fitControl, verbose=FALSE)
 
 ```
 
 ### **COMPARING THE MODELS** 
+* **first step**: information on the models
 ```{r}
 print(fitRF)
-fitRF$finalModel
-print(fitLDA)
-#The Random forest model is better as the LDA, because he has a better accuracy and a better kappa. So I choice the random forest model.
-
+print(fitGBM)
+#Looking the values of the accuracies and the kappas, random forest seems to be a better model than boosted trees.
+```
+* **Second step**:CALCULATE the out of sample error
+```{r}
+errorRF<-1-mean(fitRF$resample$Accuracy)
+errorGBM<-1-mean(fitGBM$resample$Accuracy)
+#The out of sample error is smaller for the random forest model as for the boosted trees. I choice the random forest model.
 ```
 
 ### **PREDICTION WITH TRAINING**
